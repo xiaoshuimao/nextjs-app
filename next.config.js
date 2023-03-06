@@ -1,6 +1,9 @@
+const withLess = require("next-with-less");
+
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  // reactStrictMode: false,
+const nextConfig = withLess({
+  // reactStrictMode: true,
   async rewrites() {
     return {
       fallback: [
@@ -11,6 +14,6 @@ const nextConfig = {
       ],
     }
   },
-}
+})
 
 module.exports = nextConfig

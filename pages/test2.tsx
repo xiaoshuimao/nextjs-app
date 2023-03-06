@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Button, Modal } from 'antd'
+import { Button } from 'antd'
 import Script from 'next/script'
 import styles from './test.module.less'
 import Link from "next/link";
@@ -15,9 +15,9 @@ const Index = () => {
     getList()
   }, [])
   return <div>
-    <Link href={'/test2'}>test2</Link>
+    <Link href={'/test3'}>test3</Link>
     <div className={styles.button}>111</div>
-    <Button type="primary" onClick={() => Modal.confirm({content: '22222'})}>2222</Button>
+    <Button type="primary">2222</Button>
 
   </div>
 }

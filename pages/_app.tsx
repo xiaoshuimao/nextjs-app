@@ -1,8 +1,8 @@
-import '@/styles/globals.css'
+import '@/styles/globals.less';
 import type { AppProps } from 'next/app'
 import type { NextPage } from 'next'
 import Layout from '@/components/Layout'
-import 'antd/dist/antd.css'
+// import 'antd/dist/antd.css'
 import { ReactElement, ReactNode } from 'react'
 
 export type NextPageWithLayout = NextPage & {

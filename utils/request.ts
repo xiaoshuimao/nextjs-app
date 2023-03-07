@@ -8,9 +8,25 @@ import { TOKEN } from "@/common/const";
 import storage from "./storage";
 import { message, Modal } from "antd";
 // import { baseurl } from '../../config/server.config';
-const isBrowser = () => {
-  return window && window.document;
+
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+
+/**
+ *
+ * 判断是绝对路径
+ */
+const isAbsoluteUrl = (url) => {
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
 };
+
+
+// 本机服务地址
+export const serverURL = `http://127.0.0.1:${publicRuntimeConfig.PORT}`;
+const isBrowser = () =>
+  typeof window !== "undefined" &&
+  typeof window.document !== "undefined" &&
+  typeof window.document.createElement !== "undefined";
 
 const codeMessage = {
   200: "服务器成功返回请求的数据。",
@@ -34,13 +50,6 @@ const request = axios.create({
   timeout: 1000 * 60 * 60 * 24,
 });
 
-/**
- *
- * 判断是绝对路径
- */
-const isAbsoluteUrl = (url) => {
-  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
-};
 
 request.interceptors.request.use((config) => {
   const { url } = config;
@@ -52,7 +61,7 @@ request.interceptors.request.use((config) => {
   }
   // 服务端
   else {
-    // config.url = isAbsoluteUrl(url) ? url : `${baseurl}${url}`;
+    config.url = isAbsoluteUrl(url) ? url : `${serverURL}${url}`;
   }
   return config;
 });

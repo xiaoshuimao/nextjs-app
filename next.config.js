@@ -1,5 +1,5 @@
 const withLess = require("next-with-less");
-
+const { PORT } = process.env;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = withLess({
@@ -14,6 +14,9 @@ const nextConfig = withLess({
       ],
     }
   },
+  publicRuntimeConfig: {
+    PORT,
+  }
 })
 
 module.exports = nextConfig

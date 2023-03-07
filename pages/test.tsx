@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { Button, Collapse, Modal, Spin } from 'antd'
 import Script from 'next/script'
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import styles from './test.module.less'
 import Link from "next/link";
 
-const Index = () => {
+
+const Index = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
   const getList = async () => {
     console.log(1111)
@@ -21,9 +23,11 @@ const Index = () => {
     getList()
   }, [])
   return <div>
+    <div></div>
+    {props.x}
     <Link href={'/test2'}>test2</Link>
     <div className={styles.button}>111</div>
-    <Button type="primary" onClick={() => Modal.confirm({content: '22222'})}>2222</Button>
+    <Button type="primary" onClick={() => Modal.confirm({ content: '22222' })}>2222</Button>
     <Spin spinning tip="loading"></Spin>
     <Collapse defaultActiveKey={['1']} >
       <Panel header="This is panel header 1" key="1">
@@ -38,6 +42,14 @@ const Index = () => {
     </Collapse>
 
   </div>
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {
+      x: 1
+    }
+  }
 }
 
 export default Index;

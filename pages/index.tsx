@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Collapse, Modal, Spin } from 'antd'
+import { Button, Collapse, Input, Modal, Spin } from 'antd'
 import getConfig from 'next/config'
 import Script from 'next/script'
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
@@ -8,7 +8,8 @@ import styles from './index.module.less'
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { worksApi } from "@/services";
-
+import { useStore } from "@/store";
+import { observer } from 'mobx-react-lite'
 
 const Index = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
@@ -38,6 +39,9 @@ const Index = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =>
   }, [props.data])
 
   const [data, setData] = useState(props.data)
+
+  // 全局状态
+  const { user } = useStore()
   return <div>
     <InfiniteScroll
       initialLoad={true}
@@ -52,26 +56,19 @@ const Index = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =>
       </div>
     </InfiniteScroll>
 
-
+    <p> nick: {user?.userInfo?.nick}</p>
+    <Input onChange={e => {  
+      user.setUserInfo({
+        nick: e.target.value
+      })
+    }}  />
 
     <Link href={'/test2'}>test2</Link>
     <div>
       <a onClick={handleClick}>test</a>
     </div>
-    <div className={styles.button}>111</div>
     <Button type="primary" onClick={() => Modal.confirm({ content: '22222' })}>2222</Button>
-    <Spin spinning tip="loading"></Spin>
-    <Collapse defaultActiveKey={['1']} >
-      <Panel header="This is panel header 1" key="1">
-        <p>{text}</p>
-      </Panel>
-      <Panel header="This is panel header 2" key="2">
-        <p>{text}</p>
-      </Panel>
-      <Panel header="This is panel header 3" key="3">
-        <p>{text}</p>
-      </Panel>
-    </Collapse>
+
 
   </div>
 }
@@ -81,7 +78,7 @@ type Props = {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  console.log(ctx.query.keyword, 2222)
+  console.log(ctx.query.keyword, 'ctx.query.keyword')
   const response = await worksApi({ limit: 20, keyword: ctx.query.keyword })
   return {
     props: {
@@ -91,4 +88,4 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 }
 
 
-export default Index;
+export default observer(Index);
